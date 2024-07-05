@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  web:
+    container_name: odoo_zyed
+    image: odoo_zyed
+    depends_on:
+      - mydb
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=mydb
+      - USER=odoo
+      - PASSWORD=myodoo
+    volumes:
+      - ./config/odoo.conf:/etc/odoo/odoo.conf
+      - odoo-web-data:/var/lib/odoo
+      - ../filestore:/var/lib/odoo/filestore
+      - type: bind
+        source: ../enterprise
+        target: /mnt/enterprise
+      - odoo-addons:/usr/lib/python3/dist-packages/odoo/addons
+
+  mydb:
+    container_name: postgres11
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=myodoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - ../data_psql:/var/lib/postgresql/data
+
+volumes:
+  odoo-web-data:
+  odoo-addons:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ../addons
+
