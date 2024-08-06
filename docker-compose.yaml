@@ -19,7 +19,7 @@ services:
         source: ../enterprise
         target: /mnt/enterprise
       - odoo-addons:/usr/lib/python3/dist-packages/odoo/addons
-
+      - ./extra-addons:/mnt/extra-addons
   mydb:
     container_name: postgres11
     image: postgres:15
@@ -29,7 +29,7 @@ services:
       - POSTGRES_USER=odoo
     volumes:
       - ../data_psql:/var/lib/postgresql/data
-
+      - ./backup:/mnt/backup
 volumes:
   odoo-web-data:
   odoo-addons:
